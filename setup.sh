@@ -1,5 +1,5 @@
 # Current directory
-temp_dir="/tmp/setup-new-mac"
+temp_dir="/tmp/$RANDOM/setup-new-mac"
 git clone https://github.com/vic614/setup-new-mac.git $temp_dir
 
 # install homebrew
@@ -13,12 +13,15 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 
 # Setup Vim
 # install vundle
-git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+vundle_dir=$HOME/.vim/bundle/Vundle.vim
+[ "$(ls -A $vundle_dir)" ] && echo "Vundle installed" || git clone https://github.com/VundleVim/Vundle.vim.git $vundle_dir
 
 # copy dotfiles
-
-for file in $temp_dir/dotfiles/*;do cp "$file" "$HOME/.$file"; done
+echo "Copying dotfiles..."
+for file in $temp_dir/dotfiles/*;do cp -v "$file" "$HOME/.$(basename $file)"; done
 
 # install vim plugins
+echo "Installing vim plugin..."
 vim +PluginInstall +qall
 
+echo "All done."
